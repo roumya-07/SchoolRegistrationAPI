@@ -1,0 +1,163 @@
+﻿@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>School Registration Form</h1>
+
+<div class="row">
+    <div class="col-md-4 ">
+        <div class="form-group">
+            Select State
+            <select asp="StateID" id="StateID" asp-items="@(new SelectList( ViewBag.State,"StateID","StateName"))" class="form-control">
+            </select>
+        </div>
+        <div class="form-group">
+            Select District
+            <select asp="DistrictID" id="DistrictID" class="form-control">
+            </select>
+        </div>
+        <div class="form-group">
+            <input type="hidden" id="SchoolID" class="form-control" />
+        </div>
+        <div class="form-group">
+            Enter School Name:
+            <input id="SchoolName" class="form-control" />
+        </div>
+        <div class="form-group">
+            Enter School Type:<br />
+            <input type="radio" id="SchoolType" name="SchoolType" value="Goverment" />
+            <label for="SchoolType">Goverment</label>
+            <input type="radio" id="SchoolType" name="SchoolType" value="Private" />
+            <label for="SchoolType">Private</label>
+        </div>
+        <div class="form-group">
+            Enter School Level:<br />
+            <input type="checkbox" id="SchoolLevel" value="10th" />
+            <label for="SchoolLevel">10th</label>
+            <input type="checkbox" id="SchoolLevel" value="12th" />
+            <label for="SchoolLevel">12th</label>
+        </div>
+        <div class="form-group">
+            Enter School Photo:
+            <input type="file" id="SchoolPhoto" class="form-control" />
+        </div>
+        <div class="form-group">
+            <input type="button" id="saveupdate" value="Save" class="btn btn-primary" />
+        </div>
+
+    </div>
+</div>
+<table class="table" id="table_school">
+    <thead>
+        <tr>
+            <th>
+                School ID
+            </th>
+            <th>
+                School Name
+            </th>
+            <th>
+                State Name
+            </th>
+            <th>
+                District Name
+            </th>
+            <th>
+                School Type
+            </th>
+            <th>
+                School Level
+            </th>
+            <th>
+                School Photo
+            </th>
+            <th>
+                Action
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+    </tbody>
+</table>
+
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script type="text/javascript">
+    $(window).on("load", function () {
+        GetAllSchool();
+    });
+
+    $(document).ready(function () {
+        $("#StateID").change(function () {
+            var id = $(this).val();
+            $("#DistrictID").empty();
+
+            $.getJSON("/Home/District_Bind", { StateID: id }, function (data) {
+                data = JSON.parse(data);
+                var v = "<option>Select One</option>";
+                $.each(data, function (i, v1) {
+                    v += "<option value=" + v1.Value + ">" + v1.Text + "</option>";
+                });
+                $("#DistrictID").html(v);
+            });
+        });
+    })
+
+    $("#saveupdate").click(function () {
+        var SR = { StateID: $("#StateID").val(), DistrictID: $("#DistrictID").val(), SchoolID: $("#SchoolID").val(), SchoolName: $("#SchoolName").val(), SchoolType: $("#SchoolType").val(), SchoolLevel: $("#SchoolLevel").val(), SchoolPhoto: $("#SchoolPhoto").val() };
+        $.post("/Home/CreateOrUpdate", SR, function () {
+            if (SR.SchoolID == 0) {
+                alert("Data Inserted")
+                location.reload();
+            }
+            else {
+                alert("Data Updated")
+                location.reload();
+            }
+            GetAllSchool();
+        });
+    });
+
+    function GetAllSchool() {
+        $("#table_school tbody tr").remove();
+
+        $.getJSON("/Home/GetSchool", function (data) {
+            data = JSON.parse(data);
+            $.each(data, function (i, SR) {
+                $("#table_school tbody").append(
+                    `<tr><td>` + SR.StateID + `</td><td>` + SR.DistrictID + `</td><td>` + SR.SchoolID + `</td><td>` + SR.SchoolName + `</td><td>` + SR.SchoolType + `</td><td>` + SR.SchoolLevel + `</td><td>` + SR.SchoolPhoto + `</td><td><button class="btn btn-primary" onclick="Edit(` + SR.SchoolID + `)">Edit</button>&nbsp;&nbsp;<button class="btn btn-primary" onclick="Delete(` + SR.SchoolID + `)">Delete</button></td></tr>>`
+                );
+            });
+        });
+    }
+
+    function Edit(SchoolID) {
+        $.getJSON("/Home/Edit", { SchoolID: SchoolID }, function (data) {
+            prod = JSON.parse(data);
+            $("#SchoolID").val(prod.SchoolID);
+            $("#StateID").val(prod.StateID);
+            $("#DistrictID").empty();
+            $.getJSON("Home/District_Bind", { StateID: prod.StateID }, function (data) {
+                data = JSON.parse(data);
+                $.each(data, function (i, DistrictID) {
+                    $("#DistrictID").append(
+                        `<option value=` + DistrictID.Value + `>` + DistrictID.Text + `</option>`
+                    );
+                    $("#DistrictID").val(prod.DistrictID);
+                });
+            });
+            $("#SchoolName").val(prod.SchoolName);
+            $("#StateID").val(prod.StateID);
+            $("#DistrictID").val(prod.DistrictID);
+            $("#SchoolType").val(prod.SchoolType);
+            $("#SchoolLevel").val(prod.SchoolLevel);
+            $("#SchoolPhoto").val(prod.SchoolPhoto);
+        });
+    }
+
+    function Delete(SchoolID) {
+        $.post("Home/Delete", { SchoolID: SchoolID }, function () {
+            alert("Data Deleted");
+            GetAllSchool();
+        });
+    }
+</script>
