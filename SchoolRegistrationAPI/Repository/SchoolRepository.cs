@@ -56,20 +56,29 @@ namespace SchoolRegistrationAPI.Repository
         }
         public async Task<int> InsertOrUpdate(SchoolRegistrationEntity SR)
         {
-            var cn = CreateConnection();
-            if (cn.State == ConnectionState.Closed) cn.Open();
-            DynamicParameters param = new DynamicParameters();
-            param.Add("@@SchoolID", SR.SchoolID);
-            param.Add("@StateID", SR.StateID);
-            param.Add("@DistrictID", SR.DistrictID);
-            param.Add("@SchoolName", SR.SchoolName);
-            param.Add("@SchoolType", SR.SchoolType);
-            param.Add("@SchoolLevel", SR.SchoolLevel);
-            param.Add("@SchoolPhoto", SR.SchoolPhoto);
-            param.Add("@Action", "InsertOrUpdate");
-            int x = cn.Execute("SP_SchoolRegistration", param, commandType: CommandType.StoredProcedure);
-            cn.Close();
-            return x;
+            try
+            {
+                var cn = CreateConnection();
+                if (cn.State == ConnectionState.Closed) cn.Open();
+                DynamicParameters param = new DynamicParameters();
+                param.Add("@SchoolID", SR.SchoolID);
+                param.Add("@StateID", SR.StateID);
+                param.Add("@DistrictID", SR.DistrictID);
+                param.Add("@SchoolName", SR.SchoolName);
+                param.Add("@SchoolType", SR.SchoolType);
+                param.Add("@SchoolLevel", SR.SchoolLevel);
+                param.Add("@SchoolPhoto", SR.SchoolPhoto);
+                param.Add("@Action", "InsertOrUpdate");
+                int x = cn.Execute("SP_SchoolRegistration", param, commandType: CommandType.StoredProcedure);
+                cn.Close();
+                return x;
+            }
+            catch (Exception ex)
+            {
+
+                throw;
+            }
+          
         }
         public async Task<int> Delete(int SchoolID)
         {

@@ -25,16 +25,16 @@
         </div>
         <div class="form-group">
             Enter School Type:<br />
-            <input type="radio" id="SchoolType" name="SchoolType" value="Goverment" />
+            <input type="radio" id="SchoolType" name="SchoolType" class="s_type" value="Goverment" />
             <label for="SchoolType">Goverment</label>
-            <input type="radio" id="SchoolType" name="SchoolType" value="Private" />
+            <input type="radio" id="SchoolType" name="SchoolType" class="s_type" value="Private" />
             <label for="SchoolType">Private</label>
         </div>
         <div class="form-group">
             Enter School Level:<br />
-            <input type="checkbox" id="SchoolLevel" value="10th" />
+            <input type="checkbox" id="SchoolLevel1" value="10th" name="ck" />
             <label for="SchoolLevel">10th</label>
-            <input type="checkbox" id="SchoolLevel" value="12th" />
+            <input type="checkbox" id="SchoolLevel2" value="12th" name="ck" />
             <label for="SchoolLevel">12th</label>
         </div>
         <div class="form-group">
@@ -90,7 +90,6 @@
         $("#StateID").change(function () {
             var id = $(this).val();
             $("#DistrictID").empty();
-
             $.getJSON("/Home/District_Bind", { StateID: id }, function (data) {
                 data = JSON.parse(data);
                 var v = "<option>Select One</option>";
@@ -103,8 +102,26 @@
     })
 
     $("#saveupdate").click(function () {
-        var SR = { StateID: $("#StateID").val(), DistrictID: $("#DistrictID").val(), SchoolID: $("#SchoolID").val(), SchoolName: $("#SchoolName").val(), SchoolType: $("#SchoolType").val(), SchoolLevel: $("#SchoolLevel").val(), SchoolPhoto: $("#SchoolPhoto").val() };
+        var checkboxValues = [];
+        $('input[name=ck]:checked').map(function () {
+            checkboxValues.push($(this).val());
+        });
+        var sl = "";
+        for (var i = 0; i < checkboxValues.length; i++) {
+            sl += checkboxValues[i];
+        }
+
+        var SR = {
+            SchoolID: $("#SchoolID").val(), StateID: $("#StateID").val(), DistrictID: $("#DistrictID").val(), SchoolName: $("#SchoolName").val(),
+            SchoolType: $(".s_type:checked").val(),
+
+            SchoolLevel: sl,
+
+            SchoolPhoto: $("#SchoolPhoto").val()
+        };
+
         $.post("/Home/CreateOrUpdate", SR, function () {
+            
             if (SR.SchoolID == 0) {
                 alert("Data Inserted")
                 location.reload();
@@ -114,7 +131,7 @@
                 location.reload();
             }
             GetAllSchool();
-        });
+         });
     });
 
     function GetAllSchool() {
@@ -124,7 +141,7 @@
             data = JSON.parse(data);
             $.each(data, function (i, SR) {
                 $("#table_school tbody").append(
-                    `<tr><td>` + SR.StateID + `</td><td>` + SR.DistrictID + `</td><td>` + SR.SchoolID + `</td><td>` + SR.SchoolName + `</td><td>` + SR.SchoolType + `</td><td>` + SR.SchoolLevel + `</td><td>` + SR.SchoolPhoto + `</td><td><button class="btn btn-primary" onclick="Edit(` + SR.SchoolID + `)">Edit</button>&nbsp;&nbsp;<button class="btn btn-primary" onclick="Delete(` + SR.SchoolID + `)">Delete</button></td></tr>>`
+                    `<tr><td>` + SR.schoolID + `</td><td>` + SR.stateName + `</td><td>` + SR.districtName + `</td><td>` + SR.schoolName + `</td><td>` + SR.schoolType + `</td><td>` + SR.schoolLevel + `</td><td>` + SR.schoolPhoto + `</td><td><button class="btn btn-primary" onclick="Edit(` + SR.schoolID + `)">Edit</button>&nbsp;&nbsp;<button class="btn btn-primary" onclick="Delete(` + SR.schoolID + `)">Delete</button></td></tr>>`
                 );
             });
         });

@@ -19,7 +19,7 @@ namespace SchoolRegistrationAPI.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<List<SchoolRegistrationEntity>>> GetAlGetAllSchoollProduct()
+        public async Task<ActionResult<List<SchoolRegistrationEntity>>> GetAllSchool()
         {
             return await _schoolService.GetAllSchool();
         }
@@ -34,7 +34,7 @@ namespace SchoolRegistrationAPI.Controllers
             }
             return prod;
         }
-        [HttpPut("{SchoolID}")]
+        [HttpPut("{id}")]
         public async Task<ActionResult<SchoolRegistrationEntity>> InsertOrUpdate(int id, SchoolRegistrationEntity SR)
         {
             if (id != SR.SchoolID)
