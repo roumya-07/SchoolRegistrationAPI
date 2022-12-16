@@ -81,6 +81,9 @@
 </table>
 
 <script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script src="~/Validation/Validation.js"></script>
+<script src="~/Validation/DropDownValidation.js"></script>
+
 <script type="text/javascript">
     $(window).on("load", function () {
         GetAllSchool();
@@ -102,36 +105,47 @@
     })
 
     $("#saveupdate").click(function () {
-        var checkboxValues = [];
-        $('input[name=ck]:checked').map(function () {
-            checkboxValues.push($(this).val());
-        });
-        var sl = "";
-        for (var i = 0; i < checkboxValues.length; i++) {
-            sl += checkboxValues[i];
-        }
+        if (dropDownValidation('StateID') == true && dropDownValidation('DistrictID') == true && txtChkValidation('SchoolName') == true && txtChkValidation('SchoolType') == true && txtChkValidation('SchoolPhoto') == true) {
+            var checkboxValues = [];
+            $('input[name=ck]:checked').map(function () {
+                checkboxValues.push($(this).val());
+            });
+            var sl = "";
+            for (var i = 0; i < checkboxValues.length; i++) {
+                sl += checkboxValues[i];
+            }
 
-        var SR = {
-            SchoolID: $("#SchoolID").val(), StateID: $("#StateID").val(), DistrictID: $("#DistrictID").val(), SchoolName: $("#SchoolName").val(),
-            SchoolType: $(".s_type:checked").val(),
+            var SR = {
+                SchoolID: $("#SchoolID").val(), StateID: $("#StateID").val(), DistrictID: $("#DistrictID").val(), SchoolName: $("#SchoolName").val(),
+                SchoolType: $(".s_type:checked").val(),
 
-            SchoolLevel: sl,
+                SchoolLevel: sl,
 
-            SchoolPhoto: $("#SchoolPhoto").val()
-        };
+                SchoolPhoto: $("#SchoolPhoto").val()
+            };
 
-        $.post("/Home/CreateOrUpdate", SR, function () {
+            $.post("/Home/CreateOrUpdate", SR, function () {
             
-            if (SR.SchoolID == 0) {
-                alert("Data Inserted")
-                location.reload();
-            }
-            else {
-                alert("Data Updated")
-                location.reload();
-            }
-            GetAllSchool();
-         });
+                if (SR.SchoolID == 0) {
+                    alert("Data Inserted")
+                    location.reload();
+                }
+                else {
+                    alert("Data Updated")
+                    location.reload();
+                }
+                GetAllSchool();
+            });
+        }
+        else
+        {
+            alert("Please Check your Data.");
+            dropDownValidation('StateID');
+            dropDownValidation('DistrictID');
+            txtChkValidation('SchoolName');
+            txtChkValidation('SchoolType');
+            txtChkValidation('SchoolPhoto');
+        }
     });
 
     function GetAllSchool() {
