@@ -25,10 +25,10 @@
         </div>
         <div class="form-group">
             Enter School Type:<br />
-            <input type="radio" id="SchoolType" name="SchoolType" class="s_type" value="Goverment" />
-            <label for="SchoolType">Goverment</label>
-            <input type="radio" id="SchoolType" name="SchoolType" class="s_type" value="Private" />
-            <label for="SchoolType">Private</label>
+            <input type="radio" id="SchoolTypeID" name="SchoolTypeID" class="s_type" value="1" />
+            <label for="SchoolTypeID">Goverment</label>
+            <input type="radio" id="SchoolTypeID" name="SchoolTypeID" class="s_type" value="2" />
+            <label for="SchoolTypeID">Private</label>
         </div>
         <div class="form-group">
             Enter School Level:<br />
@@ -106,6 +106,7 @@
 
     $("#saveupdate").click(function () {
         if (dropDownValidation('StateID') == true && dropDownValidation('DistrictID') == true && txtChkValidation('SchoolName') == true && txtChkValidation('SchoolPhoto') == true) {
+            debugger
             var checkboxValues = [];
             $('input[name=ck]:checked').map(function () {
                 checkboxValues.push($(this).val());
@@ -114,10 +115,11 @@
             for (var i = 0; i < checkboxValues.length; i++) {
                 sl += checkboxValues[i];
             }
-
+            debugger
             var SR = {
+                
                 SchoolID: $("#SchoolID").val(), StateID: $("#StateID").val(), DistrictID: $("#DistrictID").val(), SchoolName: $("#SchoolName").val(),
-                SchoolType: $(".s_type:checked").val(),
+                SchoolTypeID: $(".s_type:checked").val(),
 
                 SchoolLevel: sl,
 
@@ -125,7 +127,7 @@
             };
 
             $.post("/Home/CreateOrUpdate", SR, function () {
-            
+                debugger
                 if (SR.SchoolID == 0) {
                     alert("Data Inserted")
                     location.reload();
@@ -154,7 +156,7 @@
             data = JSON.parse(data);
             $.each(data, function (i, SR) {
                 $("#table_school tbody").append(
-                    `<tr><td>` + SR.schoolID + `</td><td>` + SR.stateName + `</td><td>` + SR.districtName + `</td><td>` + SR.schoolName + `</td><td>` + SR.schoolType + `</td><td>` + SR.schoolLevel + `</td><td>` + SR.schoolPhoto + `</td><td><button class="btn btn-primary" onclick="Edit(` + SR.schoolID + `)">Edit</button>&nbsp;&nbsp;<button class="btn btn-primary" onclick="Delete(` + SR.schoolID + `)">Delete</button></td></tr>>`
+                    `<tr><td>` + SR.schoolID + `</td><td>` + SR.stateName + `</td><td>` + SR.districtName + `</td><td>` + SR.schoolName + `</td><td>` + SR.schoolTypeID + `</td><td>` + SR.schoolLevel + `</td><td>` + SR.schoolPhoto + `</td><td><button class="btn btn-primary" onclick="Edit(` + SR.schoolID + `)">Edit</button>&nbsp;&nbsp;<button class="btn btn-primary" onclick="Delete(` + SR.schoolID + `)">Delete</button></td></tr>>`
                 );
             });
         });
@@ -179,7 +181,7 @@
             $("#StateID").val(prod.StateID);
             $("#DistrictID").val(prod.DistrictID);
             $('input:radio').each(function () {
-                if ($(this).val() == prod.SchoolType)
+                if ($(this).val() == prod.SchoolTypeID)
                      $(this).attr('checked', 'checked');
             });
             $('input:checkbox').each(function () {

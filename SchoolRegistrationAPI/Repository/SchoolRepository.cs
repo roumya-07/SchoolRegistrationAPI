@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace SchoolRegistrationAPI.Repository
 {
-    public class SchoolRepository : BaseReprository, ISchoolRepository
+    public class SchoolRepository : BaseRepository, ISchoolRepository
     {
         public SchoolRepository(IConfiguration configuration) : base(configuration)
         {
@@ -65,7 +65,7 @@ namespace SchoolRegistrationAPI.Repository
                 param.Add("@StateID", SR.StateID);
                 param.Add("@DistrictID", SR.DistrictID);
                 param.Add("@SchoolName", SR.SchoolName);
-                param.Add("@SchoolType", SR.SchoolType);
+                param.Add("@SchoolTypeID", SR.SchoolTypeID);
                 param.Add("@SchoolLevel", SR.SchoolLevel);
                 param.Add("@SchoolPhoto", SR.SchoolPhoto);
                 param.Add("@Action", "InsertOrUpdate");

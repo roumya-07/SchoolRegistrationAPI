@@ -7,10 +7,10 @@ using System.Threading.Tasks;
 
 namespace SchoolRegistrationAPI.Repository
 {
-    public class BaseReprository
+    public class BaseRepository
     {
         private readonly IConfiguration _configuration;
-        protected BaseReprository(IConfiguration configuration)
+        protected BaseRepository(IConfiguration configuration)
         {
             _configuration = configuration;
         }

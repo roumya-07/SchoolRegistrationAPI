@@ -18,7 +18,7 @@ namespace SchoolRegistrationAPI.Models
         [Required]
         public int DistrictID { get; set; } = 0;
         [Required]
-        public string SchoolType { get; set; } = null;
+        public int SchoolTypeID { get; set; } = 0;
         [Required]
         public string SchoolLevel { get; set; } = null;
         [Required]
@@ -29,6 +29,8 @@ namespace SchoolRegistrationAPI.Models
 
         [NotMapped]
         public string DistrictName { get; set; } = null;
+        [NotMapped]
+        public string SchoolTypeName { get; set; } = null;
     }
     public class State
     {
@@ -45,6 +47,14 @@ namespace SchoolRegistrationAPI.Models
         public int StateID { get; set; } = 0;
         [Required]
         public string DistrictName { get; set; } = null;
+    }
+
+    public class SchoolType
+    {
+        [Key]
+        public int SchoolTypeID { get; set; } = 0;
+        [Required]
+        public string SchoolTypeName { get; set; } = null;
     }
 }
 
