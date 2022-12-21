@@ -39,10 +39,13 @@
         </div>
         <div class="form-group">
             Enter School Photo:
-            <input type="file" id="SchoolPhoto" class="form-control" />
+            <input type="file" id="SchoolPhoto" class="form-control" onchange="uploadImage()"/>
         </div>
         <div class="form-group">
-            <input type="button" id="saveupdate" value="Save" class="btn btn-primary" />
+            <img id="schoolImage" height="250px" width="250px" class="img-fluid"/>
+        </div>
+        <div class="form-group">
+            <input type="button" id="saveupdate" value="Save" class="btn btn-success" />
         </div>
 
     </div>
@@ -102,11 +105,37 @@
                 $("#DistrictID").html(v);
             });
         });
+        uploadImage();
     })
 
     $("#saveupdate").click(function () {
+        var files = $("#SchoolPhoto").prop("files");
+        var url = "Home/UploadImage";
+        FormData = new FormData();
+        FormData.append("MyUploader", files[0]);
+
+        jQuery.ajax({
+            type: 'POST',
+            url: url,
+            data: FormData,
+            cache: false,
+            contentType: false,
+            processData: false,
+            beforeSend: function (xhr) {
+                xhr.setRequestHeader("XSRF-TOKEN",
+                    $('input:hidden[name="__RequestVerificationToken"]').val());
+            },
+            success: function (repo) {
+                if (repo.status == "success") {
+                    //alert("File : " + repo.filename + " is uploaded successfully");
+                }
+            },
+            error: function () {
+                alert("Error occurs");
+            }
+        });
         if (dropDownValidation('StateID') == true && dropDownValidation('DistrictID') == true && txtChkValidation('SchoolName') == true && txtChkValidation('SchoolPhoto') == true) {
-            debugger
+            //debugger
             var checkboxValues = [];
             $('input[name=ck]:checked').map(function () {
                 checkboxValues.push($(this).val());
@@ -115,19 +144,16 @@
             for (var i = 0; i < checkboxValues.length; i++) {
                 sl += checkboxValues[i];
             }
-            debugger
-            var SR = {
-                
+            //debugger
+            var SR = {                
                 SchoolID: $("#SchoolID").val(), StateID: $("#StateID").val(), DistrictID: $("#DistrictID").val(), SchoolName: $("#SchoolName").val(),
                 SchoolTypeID: $(".s_type:checked").val(),
-
                 SchoolLevel: sl,
-
                 SchoolPhoto: $("#SchoolPhoto").val()
             };
 
             $.post("/Home/CreateOrUpdate", SR, function () {
-                debugger
+                //debugger
                 if (SR.SchoolID == 0) {
                     alert("Data Inserted")
                     location.reload();
@@ -156,7 +182,7 @@
             data = JSON.parse(data);
             $.each(data, function (i, SR) {
                 $("#table_school tbody").append(
-                    `<tr><td>` + SR.schoolID + `</td><td>` + SR.stateName + `</td><td>` + SR.districtName + `</td><td>` + SR.schoolName + `</td><td>` + SR.schoolTypeName + `</td><td>` + SR.schoolLevel + `</td><td>` + SR.schoolPhoto + `</td><td><button class="btn btn-primary" onclick="Edit(` + SR.schoolID + `)">Edit</button>&nbsp;&nbsp;<button class="btn btn-primary" onclick="Delete(` + SR.schoolID + `)">Delete</button></td></tr>>`
+                    `<tr><td>` + SR.schoolID + `</td><td>` + SR.stateName + `</td><td>` + SR.districtName + `</td><td>` + SR.schoolName + `</td><td>` + SR.schoolTypeName + `</td><td>` + SR.schoolLevel + `</td><td>` + `<img src="` + SR.schoolPhoto + `" height="50px" width="50px"  />` + `</td><td><button class="btn btn-warning" onclick="Edit(` + SR.schoolID + `)">Edit</button>&nbsp;&nbsp;<button class="btn btn-danger" onclick="Delete(` + SR.schoolID + `)">Delete</button></td></tr>>`
                 );
             });
         });
@@ -188,7 +214,8 @@
                 if ($(this).val() == prod.SchoolLevel)
                     $(this).attr('checked', 'checked');
             });
-            $("#SchoolPhoto").val(prod.SchoolPhoto);
+            
+            $('#schoolImage').attr('src', prod.SchoolPhoto);
         });
     }
 
@@ -198,4 +225,19 @@
             GetAllSchool();
         });
     }
+    function uploadImage() {
+        $('#SchoolPhoto').change(function () {
+            const file = this.files[0];
+            console.log(file);
+            if (file) {
+                let reader = new FileReader();
+                reader.onload = function (event) {
+                    console.log(event.target.result);
+                    $('#schoolImage').attr('src', event.target.result);
+                }
+                reader.readAsDataURL(file);
+            }
+        });
+    }
+    
 </script>

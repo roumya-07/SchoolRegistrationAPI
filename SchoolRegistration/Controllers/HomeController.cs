@@ -57,7 +57,7 @@ namespace SchoolRegistration.Controllers
             }
             return View();
         }
-
+        
         [HttpPost]
         public IActionResult UploadImage(IFormFile MyUploader)
         {
