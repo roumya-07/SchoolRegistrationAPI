@@ -156,7 +156,7 @@
             data = JSON.parse(data);
             $.each(data, function (i, SR) {
                 $("#table_school tbody").append(
-                    `<tr><td>` + SR.schoolID + `</td><td>` + SR.stateName + `</td><td>` + SR.districtName + `</td><td>` + SR.schoolName + `</td><td>` + SR.schoolTypeID + `</td><td>` + SR.schoolLevel + `</td><td>` + SR.schoolPhoto + `</td><td><button class="btn btn-primary" onclick="Edit(` + SR.schoolID + `)">Edit</button>&nbsp;&nbsp;<button class="btn btn-primary" onclick="Delete(` + SR.schoolID + `)">Delete</button></td></tr>>`
+                    `<tr><td>` + SR.schoolID + `</td><td>` + SR.stateName + `</td><td>` + SR.districtName + `</td><td>` + SR.schoolName + `</td><td>` + SR.schoolTypeName + `</td><td>` + SR.schoolLevel + `</td><td>` + SR.schoolPhoto + `</td><td><button class="btn btn-primary" onclick="Edit(` + SR.schoolID + `)">Edit</button>&nbsp;&nbsp;<button class="btn btn-primary" onclick="Delete(` + SR.schoolID + `)">Delete</button></td></tr>>`
                 );
             });
         });
