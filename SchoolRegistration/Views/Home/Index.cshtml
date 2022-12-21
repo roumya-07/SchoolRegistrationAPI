@@ -5,7 +5,8 @@
 @*<h1>School Registration Form</h1>*@
 
 <div class="row">
-    <div class="col-md-4">
+
+    <div class="div1 col-md-6">
         <div class="form-group">
             Select State
             <select asp="StateID" id="StateID" asp-items="@(new SelectList( ViewBag.State,"StateID","StateName"))" class="form-control">
@@ -39,16 +40,18 @@
         </div>
         <div class="form-group">
             Enter School Photo:
-            <input type="file" id="SchoolPhoto" class="form-control" onchange="uploadImage()"/>
-        </div>
-        <div class="form-group">
-            <img id="schoolImage" height="250px" width="250px" class="img-fluid"/>
+            <input type="file" id="SchoolPhoto" class="form-control" onchange="uploadImage()" />
         </div>
         <div class="form-group">
             <input type="button" id="saveupdate" value="Save" class="btn btn-success" />
         </div>
-
     </div>
+    <div class="div2">
+        <div class="form-group">
+            <img id="schoolImage" height="250px" width="250px" class="img-fluid" />
+        </div>
+    </div>
+
 </div>
 <table class="table" id="table_school">
     <thead>
@@ -82,6 +85,39 @@
     <tbody>
     </tbody>
 </table>
+
+<style>
+    /* important stuff for this example */
+
+
+    .row {
+        display: flex;
+    }
+
+    .div1 {
+        flex: 1 1 auto; /* dynamic width */
+        padding-left:40px;
+        padding-right:40px;
+    }
+
+    .div2 {
+        flex: 0 0 auto; /* fixed width */
+        padding-left: 140px;
+        padding-right: 140px;
+        padding-top: 140px;
+    }
+
+
+
+    /* other stuff */
+
+
+    /*.row {
+        width: 80%;
+        padding: 1em;
+        overflow: hidden;
+    }*/
+</style>
 
 <script src="~/lib/jquery/dist/jquery.min.js"></script>
 <script src="~/Validation/Validation.js"></script>
