@@ -9,14 +9,11 @@ SchoolLevel Varchar(50),
 SchoolPhoto Varchar(Max)
 );
 
-
 Create Table TblState
 (
 StateID int Primary Key Identity(1,1),
 StateName Varchar(50)
 );
-
-
 
 Insert Into TblState
 Values('Odisha')
@@ -40,13 +37,11 @@ StateID int,
 DistrictName Varchar(50)
 );
 
-
-
 Insert Into TblDistrict
 Values(1,'Cuttack')
 
 Insert Into TblDistrict
-Values(1,'Khudra')
+Values(1,'Khurda')
 
 Insert Into TblDistrict
 Values(1,'Jajpur')
@@ -95,8 +90,6 @@ SchoolTypeName Varchar(50)
 
 Insert into SchoolType Values('Goverment')
 Insert into SchoolType Values('Private')
-
-
 
 Alter Procedure SP_SchoolRegistration
 (
