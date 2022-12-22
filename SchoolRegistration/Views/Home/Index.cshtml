@@ -168,7 +168,7 @@
             });
             var sl = "";
             for (var i = 0; i < checkboxValues.length; i++) {
-                sl += checkboxValues[i]+",";
+                sl += sl == "" ? checkboxValues[i] : "," + checkboxValues[i];
             }
             //debugger
             var SR = {                
