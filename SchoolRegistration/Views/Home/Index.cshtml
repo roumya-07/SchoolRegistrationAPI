@@ -48,7 +48,7 @@
     </div>
     <div class="div2">
         <div class="form-group">
-            <img id="schoolImage" height="250" width="250" class="img-fluid" />
+            <img id="schoolImage"  height="250" width="250"  class="img-fluid" />
         </div>
     </div>
 
@@ -237,10 +237,20 @@
                      $(this).attr('checked', 'checked');
             });
             $('input:checkbox').each(function () {
-                if ($(this).val() == prod.SchoolLevel)
+                $(this).attr('checked', false);
+            });
+            var SL = prod.SchoolLevel;
+            var array = SL.split(",",2);
+            $('input:checkbox').each(function () {
+                if ($(this).val() == array[0]) {
+                    $(this).attr('checked', 'checked');
+                }
+                else if ($(this).val() == array[1]) {
+                    $(this).attr('checked', 'checked');
+                }
+                else if ($(this).val() == array[0] && $(this).val() == array[1])
                     $(this).attr('checked', 'checked');
             });
-            
             $('#schoolImage').attr('src', prod.SchoolPhoto);
         });
     }
